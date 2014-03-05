@@ -3,8 +3,16 @@ class sauceconnect(
   $sauce_key
 ) {
 
+  case $operatingsystem {
+    centos, redhat, OEL: { $sauce_java    = 'java-1.6.0-openjdk'
+    }
+    ubuntu, debian: { $sauce_java         = 'openjdk-6-jre'
+    }
+    default: { fail("Unsupportted operating system ($operatingsystem)") }
+  }
+
   package {
-    [ 'openjdk-6-jre', 'unzip' ]:
+    [ $sauce_java, 'unzip' ]:
       ensure => present,
   }
 
